@@ -322,14 +322,16 @@ public class Service {
 		if(clazz.getId()==0)
 		{
 			classDao.save(clazz);
-			clazz.setSortPath(clazz.getParent().getSortPath()+clazz.getId()+",");
+			Clazz parent=getClass(clazz.getParent().getId());
+			clazz.setSortPath(parent.getSortPath()+clazz.getId()+",");
 			classDao.update(clazz);
 		}
 			
 		else
 		{
 			classDao.update(clazz);
-			clazz.setSortPath(clazz.getParent().getSortPath()+clazz.getId()+",");
+			Clazz parent=getClass(clazz.getParent().getId());
+			clazz.setSortPath(parent.getSortPath()+clazz.getId()+",");
 			classDao.update(clazz);
 		}
 		

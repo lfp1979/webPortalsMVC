@@ -19,20 +19,20 @@ public class TryCatch {
 	    if(msg.contains("Duplicate entry") && msg.contains("SortName"))
 	    {
 	    	String name=msg.substring(16, msg.length()-18);
-	    	msg="æ ç›®åç§°ï¼š"+name+" é‡å¤";
+	    	msg="À¸Ä¿Ãû³Æ£º"+name+" ÖØ¸´";
 	    }
 	    if(msg.contains("Cannot delete") && msg.contains("ok3w_article_ibfk_1"))
 	    {
-	    	msg="ä¸èƒ½åˆ é™¤æ­¤ç±»åˆ«ï¼Œè¯·ç¡®è®¤æ­¤ç±»åˆ«ä¸‹çš„æ‰€æœ‰æ–‡ç« éƒ½å·²åˆ é™¤ï¼";
+	    	msg="²»ÄÜÉ¾³ı´ËÀà±ğ£¬ÇëÈ·ÈÏ´ËÀà±ğÏÂµÄËùÓĞÎÄÕÂ¶¼ÒÑÉ¾³ı£¡";
 	    }
 	    if(msg.contains("Cannot delete") && msg.contains("ok3w_class_ibfk_1"))
 	    {
-	    	msg="ä¸èƒ½åˆ é™¤æ­¤ç±»åˆ«ï¼Œè¯·ç¡®è®¤æ­¤ç±»åˆ«ä¸‹çš„æ‰€æœ‰å­ç±»åˆ«éƒ½å·²åˆ é™¤ï¼";
+	    	msg="²»ÄÜÉ¾³ı´ËÀà±ğ£¬ÇëÈ·ÈÏ´ËÀà±ğÏÂµÄËùÓĞ×ÓÀà±ğ¶¼ÒÑÉ¾³ı£¡";
 	    }
 	    return msg;
 	}
 	@Pointcut("execution(* ok3w.service.Service.*(..))")
-	private void anyMethod(){}//å®šä¹‰ä¸€ä¸ªåˆ‡å…¥ç‚¹Â Â 
+	private void anyMethod(){}
 	
 	@Around("anyMethod()")
 	public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable{

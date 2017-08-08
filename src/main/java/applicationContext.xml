@@ -60,8 +60,7 @@
 	</bean>
 	<!-- springmvc提供的简单异常处理器 -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-     	<!-- 定义默认的异常处理页面 -->
-   		 <property name="defaultErrorView" value="error"/>
+		<property name="defaultErrorView" value="error"/>
 	</bean>
 	<!-- 开启注解这里需要添加个validator-->
 	 <!--开启注解  -->    

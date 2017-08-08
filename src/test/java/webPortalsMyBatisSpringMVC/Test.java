@@ -16,10 +16,7 @@ public class Test {
 		// TODO Auto-generated method stub
 		ApplicationContext ac = new FileSystemXmlApplicationContext("src/main/java/applicationContext.xml"); 
 		Service s = (Service) ac.getBean("service");
-	    Clazz c=new Clazz();
-	    c.setId(0);
-	    c.setSortName("ÍøÂç±à³Ì");
-	    s.ClassSaveOrUpdate(c);
+	    s.listClassChild(60);
 	   // System.out.println(s.getPicList().size());
 	}
 
