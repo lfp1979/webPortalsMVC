@@ -1,0 +1,1 @@
+springMVC+mybatis实现的webPortals程序，数据库配置与webPortals项目相同
