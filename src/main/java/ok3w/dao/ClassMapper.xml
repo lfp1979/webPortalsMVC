@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ok3w.dao.IClassDao" >  
+    <resultMap id="BaseResultMap" type="ok3w.entity.Clazz">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="isOpen" property="isOpen" jdbcType="BOOLEAN" />
+  		<result column="orderId" property="orderID" jdbcType="INTEGER"/>
+        <result column="sortPath" property="sortPath" jdbcType="VARCHAR"/>
+        <result column="sortName" property="sortName" jdbcType="VARCHAR"/>
+  		<association property="parent" column="ParentID" select="ok3w.dao.IClassDao.get" fetchType="eager"/>
+        <collection property="child" column="id" select="ok3w.dao.IClassDao.getByParentId" />
+        <collection property="articles" column="id" select="ok3w.dao.IArticleDao.getByClassId"/>
+   
+  </resultMap>
+     <sql id="Base_Column_List">
+     	id, isOpen,parentID,orderID,sortPath,sortName
+     </sql>
+    <!-- 查询-->
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    	select
+    		<include refid="Base_Column_List" />
+    	from ok3w_class where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    	select
+    		<include refid="Base_Column_List" />
+    	from ok3w_class where parentId = #{parentId,jdbcType=INTEGER} order by orderID
+    </select>
+     <select id="list" resultMap="BaseResultMap" >
+    	select
+    		<include refid="Base_Column_List" />
+    	from ok3w_class
+    </select>
+     <select id="find" resultMap="BaseResultMap" >
+    	select
+    		<include refid="Base_Column_List" />
+    	from ok3w_class where parentId=#{parentId} and orderId=#{orderId}
+    </select>
+     <!-- 删除-->
+     <delete id="delete" parameterType="ok3w.entity.Clazz">
+        delete from ok3w_class
+        where id = #{id,jdbcType=INTEGER}  
+      </delete>
+     <!-- 添加-->
+     <insert id="save" parameterType="ok3w.entity.Clazz" useGeneratedKeys="true" keyProperty="id">
+      insert into ok3w_class  
+      <trim prefix="(" suffix=")" suffixOverrides="," >  
+       <if test="parent != null" >  
+          parentID,  
+        </if>  
+        <if test="isOpen != null" >  
+          isOpen,  
+        </if>  
+        <if test="orderID != null" >  
+          orderID,  
+        </if>  
+        <if test="sortName != null" >  
+          sortName,  
+        </if>  
+        <if test="sortPath != null" >  
+          sortPath,  
+        </if>  
+      </trim>  
+      <trim prefix="values (" suffix=")" suffixOverrides="," >  
+         <if test="parent != null" >  
+          #{parent.id,jdbcType=INTEGER},  
+        </if>  
+         <if test="isOpen != null" >   
+          #{isOpen,jdbcType=BOOLEAN},  
+        </if>  
+         <if test="orderID != null" >   
+          #{orderID,jdbcType=INTEGER},  
+        </if>  
+        <if test="sortName != null" > 
+          #{sortName,jdbcType=VARCHAR},  
+        </if>  
+        <if test="sortPath != null" >  
+          #{sortPath,jdbcType=VARCHAR},  
+        </if>  
+      </trim>   
+  </insert>
+     <!-- 更新-->
+     <update id="update" parameterType="ok3w.entity.Clazz" >  
+        update ok3w_class  
+        <set >  
+         <if test=" sortName != null" >  
+            sortName = #{sortName,jdbcType=VARCHAR},  
+          </if>  
+           <if test=" parent != null" >  
+             parentID = #{ parent.id,jdbcType=INTEGER},  
+          </if>  
+          <if test=" isOpen != null" >  
+            isOpen = #{isOpen,jdbcType=BOOLEAN},  
+          </if>  
+          <if test="orderID != null" >  
+            orderID = #{orderID,jdbcType=INTEGER},  
+          </if>  
+          <if test="sortPath != null" >  
+            sortPath = #{sortPath,jdbcType=VARCHAR},  
+          </if>  
+        </set>  
+        where id = #{id,jdbcType=INTEGER} 
+      </update>
+</mapper>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ok3w.dao.IArticleDao" >  
+    <resultMap id="BaseResultMap" type="ok3w.entity.Article">
+         <id column="id" property="id" jdbcType="INTEGER"/>
+         <result column="addTime" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="comeFrom" property="comeFrom" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="inputer" property="inputer" jdbcType="VARCHAR" />
+        <result column="picFile" property="picFile" jdbcType="VARCHAR" />
+        <result column="sortPath" property="sortPath" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+         <result column="isCommend" property="isCommend" jdbcType="BOOLEAN" />
+         <result column="isDelete" property="isDelete" jdbcType="BOOLEAN" />
+         <result column="isMove" property="isMove" jdbcType="BOOLEAN" />
+         <result column="isPass" property="isPass" jdbcType="BOOLEAN" />
+         <result column="isPic" property="isPic" jdbcType="BOOLEAN" />
+         <result column="isPlay" property="isPlay" jdbcType="BOOLEAN" />
+          <result column="isTop" property="isTop" jdbcType="BOOLEAN" />
+         <result column="hits" property="hits" jdbcType="INTEGER" />
+         <association property="clazz" column="ClassID" select="ok3w.dao.IClassDao.get" fetchType="eager"/>
+     </resultMap>
+    <sql id="Base_Column_List">
+              id,  addTime,  author,   comeFrom,  content,  hits,
+			 inputer,  isCommend,  isDelete,  isMove,  isPass,  isPic,
+			 isPlay,  isTop,  picFile,  sortPath,  title,classID
+   </sql>
+
+    <!-- 查询用户-->
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getByClassId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+        where classId = #{classId,jdbcType=INTEGER}
+    </select>
+     <select id="getPicList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+        where isPlay=true and isPass=true
+    </select>
+     <select id="getCount" resultType="java.lang.Integer">
+        select count(*)   from ok3w_article
+    </select>
+     <select id="listPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article ORDER BY id limit #{index},#{count}
+     </select>
+     <select id="getClassArticles" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+        WHERE FIND_IN_SET(#{id},SortPath) and isPass=true  ORDER BY isTop DESC,isCommend DESC,addTime DESC
+        <if test="count > 0" >  
+           limit 0,#{count} 
+        </if>  
+     </select>
+     <select id="getClassArticlesOrderByHits" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+         WHERE FIND_IN_SET(#{id},SortPath) and isPass=true ORDER BY hits DESC limit 0,#{count} 
+    </select>
+     <select id="getClassArticlesOrderAddTime" resultMap="BaseResultMap">
+         select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+         WHERE FIND_IN_SET(#{id},SortPath) and isPass=true ORDER BY addTime DESC limit 0,#{count} 
+    </select>
+    <select id="getMoveArticle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_article
+        where isMove = true
+    </select>
+     <!-- 删除-->
+     <delete id="del" parameterType="INTEGER">
+        delete from ok3w_article
+        where id = #{articleId,jdbcType=INTEGER}  
+      </delete>
+     <!-- 添加-->
+     <insert id="save" parameterType="ok3w.entity.Article" useGeneratedKeys="true" keyProperty="id">
+      insert into ok3w_article  
+      <trim prefix="(" suffix=")" suffixOverrides="," >  
+       <if test="clazz != null" >  
+          classID,  
+        </if>  
+        <if test="hits != null" >  
+          hits,  
+        </if> 
+         <if test="isMove != null" >  
+          isMove,  
+        </if> 
+        <if test="isCommend != null" >  
+          isCommend,  
+        </if>  
+        <if test="isDelete != null" >  
+          isDelete,  
+        </if>  
+        <if test="isPass != null" >  
+          isPass,  
+        </if>  
+         <if test="isPic != null" >  
+          isPic,  
+        </if>  
+        <if test="isPlay != null" >  
+          isPlay,  
+        </if>  
+        <if test="isTop != null" >  
+          isTop,  
+        </if>  
+          <if test="addTime != null" >  
+          addTime,  
+        </if>  
+        <if test="author != null" >  
+          author,  
+        </if>  
+        <if test="comeFrom != null" >  
+          comeFrom,  
+        </if>  
+        <if test="inputer != null" >  
+          inputer,  
+        </if>  
+         <if test="picFile != null" >  
+          picFile,  
+        </if>  
+        <if test="sortPath != null" >  
+          sortPath,  
+        </if>  
+        <if test="title != null" >  
+          title,  
+        </if>  
+        <if test="content != null" >  
+          content,  
+        </if>  
+       
+      </trim>  
+      <trim prefix="values (" suffix=")" suffixOverrides="," >  
+        
+        <if test="clazz != null" >  
+          #{clazz.id,jdbcType=INTEGER},  
+        </if>  
+        <if test="hits != null" >  
+           #{hits,jdbcType=INTEGER},  
+        </if>  
+         <if test="isMove != null" >  
+           #{isMove,jdbcType=BOOLEAN},    
+        </if>  
+        <if test="isCommend != null" >  
+           #{isCommend,jdbcType=BOOLEAN},    
+        </if>  
+        <if test="isDelete != null" >  
+         #{isDelete,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isPass != null" >  
+          #{isPass,jdbcType=BOOLEAN},  
+        </if>  
+         <if test="isPic != null" >  
+          #{isPic,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isPlay != null" >  
+          #{isPlay,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isTop != null" >  
+          #{isTop,jdbcType=BOOLEAN},  
+        </if>  
+          <if test="addTime != null" >  
+          #{addTime,jdbcType=TIMESTAMP},  
+        </if>  
+        <if test="author != null" >  
+          #{author,jdbcType=VARCHAR}, 
+        </if>  
+        <if test="comeFrom != null" >  
+           #{comeFrom,jdbcType=VARCHAR},  
+        </if>  
+        <if test="inputer != null" >  
+          #{inputer,jdbcType=VARCHAR},  
+        </if>  
+         <if test="picFile != null" >  
+           #{picFile,jdbcType=VARCHAR},  
+        </if>  
+        <if test="sortPath != null" >  
+          #{sortPath,jdbcType=VARCHAR},    
+        </if>  
+        <if test="title != null" >  
+           #{title,jdbcType=VARCHAR},   
+        </if>  
+        <if test="content != null" >  
+           #{content,jdbcType=VARCHAR},  
+        </if>  
+      </trim>   
+  </insert>
+     <!-- 更新-->
+     <update id="update" parameterType="ok3w.entity.Article" >  
+        update ok3w_article
+        <set >  
+        <if test="clazz != null" >  
+           classID = #{clazz.id,jdbcType=VARCHAR}, 
+        </if>  
+        <if test="hits != null" >  
+           hits=#{hits,jdbcType=INTEGER},  
+        </if> 
+         <if test="isMove != null" >  
+           isMove=#{isMove,jdbcType=BOOLEAN},    
+        </if>  
+        <if test="isCommend != null" >  
+           isCommend=#{isCommend,jdbcType=BOOLEAN},    
+        </if>  
+        <if test="isDelete != null" >  
+           isDelete=#{isDelete,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isPass != null" >  
+           isPass=#{isPass,jdbcType=BOOLEAN},  
+        </if>  
+         <if test="isPic != null" >  
+          isPic=#{isPic,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isPlay != null" >  
+          isPlay=#{isPlay,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="isTop != null" >  
+          isTop=#{isTop,jdbcType=BOOLEAN},  
+        </if>  
+        <if test="addTime != null" >  
+          addTime=#{addTime,jdbcType=TIMESTAMP},  
+        </if>  
+        <if test="author != null" >  
+          author=#{author,jdbcType=VARCHAR}, 
+        </if>  
+        <if test="comeFrom != null" >  
+           comeFrom=#{comeFrom,jdbcType=VARCHAR},  
+        </if>  
+        <if test="inputer != null" >  
+          inputer=#{inputer,jdbcType=VARCHAR},  
+        </if>  
+         <if test="picFile != null" >  
+           picFile=#{picFile,jdbcType=VARCHAR},  
+        </if>  
+        <if test="sortPath != null" >  
+          sortPath=#{sortPath,jdbcType=VARCHAR},   
+        </if>  
+        <if test="title != null" >  
+           title=#{title,jdbcType=VARCHAR},   
+        </if>  
+        <if test="content != null" >  
+           content=#{content,jdbcType=VARCHAR},  
+        </if>  
+        </set>  
+        where id = #{id,jdbcType=INTEGER} 
+      </update>
+</mapper>

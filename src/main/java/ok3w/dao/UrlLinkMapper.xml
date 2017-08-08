@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ok3w.dao.IUrlLinkDao" >  
+    <resultMap id="BaseResultMap" type="ok3w.entity.UrlLink">
+        <result column="Lid" property="Lid" jdbcType="INTEGER" />
+        <result column="Lname" property="Lname" jdbcType="VARCHAR" />
+       <result column="Lurl" property="Lurl" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        Lid, Lname, Lurl
+    </sql>
+   <!-- 批量查询用户-->
+    <select id="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ok3w_link
+    </select>
+</mapper>
